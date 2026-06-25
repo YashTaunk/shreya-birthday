@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday ❤️</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday ❤️</title>
 
-<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 </head>
+
 <body>
 
 <div id="welcomeScreen">
     <h1>❤️ A Special Surprise For You ❤️</h1>
 
     <p>
-        Every memory has a place.
+        Every memory has a place.<br>
         Can you put ours back together?
     </p>
 
@@ -41,15 +42,12 @@
     <h1>🎂 Happy Birthday Shreya ❤️</h1>
 
     <p class="message">
-        Every piece of this puzzle represents
-        a memory we've created together.
-        <br><br>
-        Thank you for being my best friend,
-        my partner and my home.
-        <br><br>
-        I can't wait to create many more
-        beautiful memories with you.
-        <br><br>
+        Every piece of this puzzle represents a memory we've created together.<br><br>
+
+        Thank you for being my best friend, my partner and my home.<br><br>
+
+        I can't wait to create many more beautiful memories with you.<br><br>
+
         Love,<br>
         Yash ❤️
     </p>
@@ -60,223 +58,3 @@
 
 </body>
 </html>
-
-style.css
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
-body{
-background:#0f172a;
-color:white;
-text-align:center;
-min-height:100vh;
-padding:20px;
-overflow-x:hidden;
-}
-
-.hidden{
-display:none;
-}
-
-#welcomeScreen{
-margin-top:120px;
-}
-
-#welcomeScreen h1{
-font-size:2rem;
-margin-bottom:20px;
-}
-
-#welcomeScreen p{
-font-size:1.1rem;
-max-width:500px;
-margin:auto;
-line-height:1.6;
-}
-
-button{
-margin-top:30px;
-padding:15px 30px;
-border:none;
-border-radius:12px;
-background:#ff4d6d;
-color:white;
-font-size:18px;
-cursor:pointer;
-}
-
-.progress{
-width:320px;
-height:12px;
-background:#334155;
-margin:20px auto;
-border-radius:20px;
-overflow:hidden;
-}
-
-#progressBar{
-width:0%;
-height:100%;
-background:#22c55e;
-transition:.3s;
-}
-
-#puzzle{
-width:320px;
-height:320px;
-margin:auto;
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:2px;
-}
-
-.tile{
-border:1px solid rgba(255,255,255,.2);
-cursor:pointer;
-}
-
-.final-photo{
-width:90%;
-max-width:400px;
-border-radius:20px;
-margin-top:20px;
-box-shadow:0 0 40px rgba(255,255,255,.25);
-}
-
-#messageScreen{
-padding:20px;
-animation:fadeIn 1s ease;
-}
-
-.message{
-margin-top:20px;
-font-size:20px;
-line-height:1.8;
-max-width:600px;
-margin-left:auto;
-margin-right:auto;
-}
-
-@keyframes fadeIn{
-from{
-opacity:0;
-transform:translateY(20px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
-
-script.js
-
-const startBtn = document.getElementById("startBtn");
-const welcome = document.getElementById("welcomeScreen");
-const game = document.getElementById("gameScreen");
-const message = document.getElementById("messageScreen");
-
-const puzzle = document.getElementById("puzzle");
-const progressBar = document.getElementById("progressBar");
-
-const rows = 4;
-const cols = 4;
-const total = rows * cols;
-
-let pieces = [];
-let first = null;
-
-startBtn.onclick = () => {
-    welcome.classList.add("hidden");
-    game.classList.remove("hidden");
-    createPuzzle();
-};
-
-function createPuzzle(){
-
-    pieces = [];
-
-    for(let i=0;i<total;i++){
-        pieces.push(i);
-    }
-
-    pieces.sort(()=>Math.random()-0.5);
-
-    render();
-}
-
-function render(){
-
-    puzzle.innerHTML = "";
-
-    let correct = 0;
-
-    pieces.forEach((piece,index)=>{
-
-        if(piece===index){
-            correct++;
-        }
-
-        const tile = document.createElement("div");
-
-        tile.className = "tile";
-
-        tile.style.backgroundImage = "url('photo.jpg')";
-        tile.style.backgroundSize = "320px 320px";
-
-        const x = (piece % cols) * -80;
-        const y = Math.floor(piece / cols) * -80;
-
-        tile.style.backgroundPosition = `${x}px ${y}px`;
-
-        tile.onclick = () => swap(index);
-
-        puzzle.appendChild(tile);
-    });
-
-    progressBar.style.width =
-        `${(correct/total)*100}%`;
-
-    if(correct===total){
-        finishPuzzle();
-    }
-}
-
-function swap(index){
-
-    if(first===null){
-        first=index;
-        return;
-    }
-
-    [pieces[first], pieces[index]] =
-    [pieces[index], pieces[first]];
-
-    first=null;
-
-    render();
-}
-
-function finishPuzzle(){
-
-    game.classList.add("hidden");
-
-    message.classList.remove("hidden");
-
-    confetti({
-        particleCount: 300,
-        spread: 120,
-        origin:{y:0.6}
-    });
-
-    setInterval(()=>{
-        confetti({
-            particleCount:80,
-            spread:100
-        });
-    },3000);
-}
