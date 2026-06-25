@@ -1,109 +1,109 @@
-{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
 }
 
 body{
-background:#0f172a;
-color:white;
-text-align:center;
-min-height:100vh;
-padding:20px;
-overflow-x:hidden;
+    background:#0f172a;
+    color:white;
+    text-align:center;
+    min-height:100vh;
+    padding:20px;
+    overflow-x:hidden;
 }
 
 .hidden{
-display:none;
+    display:none;
 }
 
 #welcomeScreen{
-margin-top:120px;
+    margin-top:120px;
 }
 
 #welcomeScreen h1{
-font-size:2rem;
-margin-bottom:20px;
+    font-size:2rem;
+    margin-bottom:20px;
 }
 
 #welcomeScreen p{
-font-size:1.1rem;
-max-width:500px;
-margin:auto;
-line-height:1.6;
+    font-size:1.1rem;
+    max-width:500px;
+    margin:auto;
+    line-height:1.6;
 }
 
 button{
-margin-top:30px;
-padding:15px 30px;
-border:none;
-border-radius:12px;
-background:#ff4d6d;
-color:white;
-font-size:18px;
-cursor:pointer;
+    margin-top:30px;
+    padding:15px 30px;
+    border:none;
+    border-radius:12px;
+    background:#ff4d6d;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
 }
 
 .progress{
-width:320px;
-height:12px;
-background:#334155;
-margin:20px auto;
-border-radius:20px;
-overflow:hidden;
+    width:320px;
+    height:12px;
+    background:#334155;
+    margin:20px auto;
+    border-radius:20px;
+    overflow:hidden;
 }
 
 #progressBar{
-width:0%;
-height:100%;
-background:#22c55e;
-transition:.3s;
+    width:0%;
+    height:100%;
+    background:#22c55e;
+    transition:.3s;
 }
 
 #puzzle{
-width:320px;
-height:320px;
-margin:auto;
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:2px;
+    width:320px;
+    height:320px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:2px;
 }
 
 .tile{
-border:1px solid rgba(255,255,255,.2);
-cursor:pointer;
+    border:1px solid rgba(255,255,255,.2);
+    cursor:pointer;
 }
 
 .final-photo{
-width:90%;
-max-width:400px;
-border-radius:20px;
-margin-top:20px;
-box-shadow:0 0 40px rgba(255,255,255,.25);
+    width:90%;
+    max-width:400px;
+    border-radius:20px;
+    margin-top:20px;
+    box-shadow:0 0 40px rgba(255,255,255,.25);
 }
 
 #messageScreen{
-padding:20px;
-animation:fadeIn 1s ease;
+    padding:20px;
+    animation:fadeIn 1s ease;
 }
 
 .message{
-margin-top:20px;
-font-size:20px;
-line-height:1.8;
-max-width:600px;
-margin-left:auto;
-margin-right:auto;
+    margin-top:20px;
+    font-size:20px;
+    line-height:1.8;
+    max-width:600px;
+    margin-left:auto;
+    margin-right:auto;
 }
 
 @keyframes fadeIn{
-from{
-opacity:0;
-transform:translateY(20px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
 }
