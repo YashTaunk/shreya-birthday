@@ -2,187 +2,207 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Happy Birthday Shreya ❤️</title>
+<meta charset="UTF-8">
 
-    <link rel="stylesheet" href="style.css">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<title>
+Happy Birthday ❤️
+</title>
 
-    <!-- Confetti -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<link rel="stylesheet"
+href="style.css">
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js">
+</script>
+
 </head>
 
 <body>
 
 <!-- Floating Hearts -->
+
 <div id="hearts"></div>
 
-<!-- ==========================
-     WELCOME SCREEN
-=========================== -->
+<!-- ===================================== -->
+<!-- WELCOME SCREEN -->
+<!-- ===================================== -->
 
-<section id="welcomeScreen" class="screen active">
+<section
+id="welcome"
+class="screen show">
 
-    <div class="glass">
+<div class="glass">
 
-        <h1 class="title">
-            ❤️ Happy Birthday ❤️
-        </h1>
+<h1>
 
-        <h2 class="subtitle">
-            Dear Shreya
-        </h2>
+❤️ Happy Birthday ❤️
 
-        <p class="intro">
+</h1>
 
-            Every beautiful memory we've created
-            is hidden inside one picture.
+<h2>
 
-            <br><br>
+Dear Shreya
 
-            Can you put it back together?
+</h2>
 
-        </p>
+<p>
 
-        <button id="startBtn">
-            Start Puzzle
-        </button>
+Every memory has a place.
 
-    </div>
+<br><br>
 
-</section>
+Can you rebuild ours?
 
-<!-- ==========================
-     PUZZLE SCREEN
-=========================== -->
+</p>
 
-<section id="gameScreen" class="screen">
+<button
+id="startBtn">
 
-    <div class="topBar">
+Start Puzzle ❤️
 
-        <h2>
-            Complete Our Memory ❤️
-        </h2>
-
-        <div class="progressContainer">
-
-            <div id="progressBar"></div>
-
-        </div>
-
-        <p id="progressText">
-
-            0 / 16 Pieces
-
-        </p>
-
-    </div>
-
-    <div id="puzzleContainer">
-
-        <!-- JavaScript will generate the puzzle here -->
-
-    </div>
-
-</section>
-
-<!-- ==========================
-     MESSAGE SCREEN
-=========================== -->
-
-<section id="messageScreen" class="screen">
-
-    <div class="messageCard">
-
-        <img
-            src="photo.jpg"
-            class="finalPhoto"
-            alt="Our Photo">
-
-        <h1>
-
-            🎂 Happy Birthday Shreya ❤️
-
-        </h1>
-
-        <p id="typeWriter">
-
-        </p>
-
-        <button id="playVideo">
-
-            Continue ❤️
-
-        </button>
-
-    </div>
-
-</section>
-
-<!-- ==========================
-     VIDEO SCREEN
-=========================== -->
-
-<section id="videoScreen" class="screen">
-
-    <video
-        id="birthdayVideo"
-        controls
-        playsinline
-        preload="auto">
-
-        <source
-            src="birthday.mp4"
-            type="video/mp4">
-
-    </video>
-
-</section>
-
-<script src="script.js"></script>
-
-    <!-- ==========================
-     LOADING OVERLAY
-=========================== -->
-
-<div id="loadingOverlay">
-
-    <div class="loader"></div>
-
-    <h2>
-        Preparing your surprise...
-    </h2>
+</button>
 
 </div>
 
-<!-- ==========================
-     AUDIO (Optional)
-=========================== -->
+</section>
 
-<audio
-    id="bgMusic"
-    loop
-    preload="auto">
+<!-- ===================================== -->
+<!-- GAME SCREEN -->
+<!-- ===================================== -->
 
-    <source
-        src="music.mp3"
-        type="audio/mpeg">
+<section
+id="game"
+class="screen">
 
-</audio>
+<div class="top">
 
-<!-- ==========================
-     FOOTER
-=========================== -->
+<h2>
 
-<footer>
+Rebuild Our Memory ❤️
 
-    Made with ❤️ by Yash
+</h2>
 
-</footer>
+<div class="progressOuter">
+
+<div id="progress">
+
+</div>
+
+</div>
+
+<p id="progressText">
+
+0 / 36 Memories Restored ❤️
+
+</p>
+
+<p id="milestone">
+
+</p>
+
+</div>
+
+<div
+id="puzzle">
+
+</div>
+
+</section>
+
+<!-- ===================================== -->
+<!-- REVEAL SCREEN -->
+<!-- ===================================== -->
+
+<section
+id="reveal"
+class="screen">
+
+<div class="glass revealCard">
+
+<img
+id="finalPhoto"
+src="photo.jpg"
+alt="Our Memory">
+
+<h1>
+
+🎂 Happy Birthday Shreya ❤️
+
+</h1>
+
+<p id="message">
+
+</p>
+
+<button
+id="watchBtn">
+
+❤️ Watch Your Surprise
+
+</button>
+
+</div>
+
+</section>
+
+<!-- ===================================== -->
+<!-- VIDEO SCREEN -->
+<!-- ===================================== -->
+
+<section
+id="videoScreen"
+class="screen">
+
+<video
+id="birthdayVideo"
+controls
+playsinline
+preload="auto">
+
+<source
+src="birthday.mp4"
+type="video/mp4">
+
+</video>
+
+</section>
+
+<!-- ===================================== -->
+<!-- LOADING SCREEN -->
+<!-- ===================================== -->
+
+<div
+id="loadingScreen">
+
+<div class="loader">
+
+</div>
+
+<p>
+
+Preparing your surprise...
+
+</p>
+
+</div>
+
+<script
+src="script.js">
+
+</script>
 
 </body>
 
