@@ -1,121 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Happy Birthday ❤️</title>
-
-<link rel="stylesheet"
-href="style.css">
-
-<link rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
-rel="stylesheet">
-
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Happy Birthday Shreya ❤️</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+    <!-- Floating Hearts Container -->
+    <div id="floating-hearts" aria-hidden="true"></div>
 
-<div id="background"></div>
+    <!-- Background Layer -->
+    <div id="background-layer">
+        <div id="bg-image"></div>
+        <div id="bg-overlay"></div>
+    </div>
 
-<div id="overlay"></div>
+    <!-- Screen 1: Welcome -->
+    <section id="welcome-screen" class="screen active">
+        <div class="glass-card welcome-card">
+            <h1>❤️ Happy Birthday ❤️</h1>
+            <p class="greeting">Dear Shreya,</p>
+            <p class="message">Every memory has its place...<br>Can you rebuild ours?</p>
+            <button id="start-btn" class="premium-btn">
+                <span>❤️ Start Puzzle</span>
+            </button>
+        </div>
+    </section>
 
-<div id="hearts"></div>
+    <!-- Screen 2: Puzzle -->
+    <section id="puzzle-screen" class="screen">
+        <div class="puzzle-container">
+            <div class="progress-section">
+                <div class="progress-bar">
+                    <div id="progress-fill"></div>
+                </div>
+                <p id="progress-text">❤️ 0 / 36 Memories Restored</p>
+            </div>
+            <p id="encouragement" class="encouragement"></p>
+            <div id="puzzle-grid"></div>
+        </div>
+    </section>
 
-<section id="welcome" class="show">
+    <!-- Screen 3: Letter -->
+    <section id="letter-screen" class="screen">
+        <div class="letter-container">
+            <div class="completed-photo">
+                <img id="completed-image" src="photo.jpg" alt="Our Memory">
+            </div>
+            <div class="glass-card letter-card">
+                <h2 id="letter-title"></h2>
+                <p id="letter-content"></p>
+                <p id="letter-signature"></p>
+                <button id="video-btn" class="premium-btn hidden">
+                    <span>❤️ Watch Your Surprise</span>
+                </button>
+            </div>
+        </div>
+    </section>
 
-<div class="glass">
+    <!-- Screen 4: Video -->
+    <section id="video-screen" class="screen">
+        <div class="video-container">
+            <video id="birthday-video" src="birthday.mp4" controls playsinline></video>
+        </div>
+    </section>
 
-<h1>
+    <!-- Confetti Canvas -->
+    <canvas id="confetti-canvas" aria-hidden="true"></canvas>
 
-❤️ Happy Birthday ❤️
-
-</h1>
-
-<h2>
-
-Dear Shreya
-
-</h2>
-
-<p>
-
-Every memory tells a story...
-
-<br><br>
-
-Today I'd like to relive one of my favourites.
-
-</p>
-
-<button id="startBtn">
-
-Reveal Our Memory ❤️
-
-</button>
-
-</div>
-
-</section>
-
-<section id="memory">
-
-<img
-id="photo"
-src="photo.jpg">
-
-<div class="messageCard">
-
-<h1>
-
-🎂 Happy Birthday ❤️
-
-</h1>
-
-<p id="message">
-
-</p>
-
-<button id="watchBtn">
-
-❤️ Watch Your Surprise
-
-</button>
-
-</div>
-
-</section>
-
-<section id="videoPage">
-
-<video
-id="birthdayVideo"
-controls
-playsinline>
-
-<source
-src="birthday.mp4"
-type="video/mp4">
-
-</video>
-
-</section>
-
-<script src="script.js"></script>
-
+    <!-- Canvas Confetti CDN -->
+    <script src="[cdn.jsdelivr.net](https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js)"></script>
+    <script src="script.js"></script>
 </body>
-
 </html>
