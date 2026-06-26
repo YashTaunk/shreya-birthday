@@ -1,400 +1,623 @@
-/* =========================================
-GLOBAL
-========================================= */
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Poppins',sans-serif;
+/* ============================================
+   CSS Variables & Root Styles
+   ============================================ */
+:root {
+    --pink-light: #ffb6c1;
+    --pink-medium: #ff69b4;
+    --pink-dark: #ff1493;
+    --white: #ffffff;
+    --white-soft: rgba(255, 255, 255, 0.95);
+    --dark-blue: #1a1a2e;
+    --dark-blue-light: #16213e;
+    --glass-bg: rgba(255, 255, 255, 0.15);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.3);
+    --shadow-glow-pink: 0 0 30px rgba(255, 105, 180, 0.5);
+    --shadow-glow-green: 0 0 20px rgba(0, 255, 100, 0.4);
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.2s ease;
 }
 
-body{
-
-background:#000;
-
-color:white;
-
-overflow:hidden;
-
+/* ============================================
+   Reset & Base Styles
+   ============================================ */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-
-/* =========================================
-BACKGROUND
-========================================= */
-
-#background{
-
-position:fixed;
-
-inset:0;
-
-background:url("photo.jpg");
-
-background-size:cover;
-
-background-position:center;
-
-filter:blur(20px);
-
-transform:scale(1.12);
-
-transition:all 3s ease;
-
-z-index:-3;
-
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--dark-blue);
+    color: var(--white);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    touch-action: manipulation;
 }
 
-#background.clear{
-
-filter:blur(0);
-
-transform:scale(1);
-
+/* ============================================
+   Background Layer
+   ============================================ */
+#background-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    overflow: hidden;
 }
 
-#overlay{
-
-position:fixed;
-
-inset:0;
-
-background:rgba(0,0,0,.45);
-
-z-index:-2;
-
+#bg-image {
+    position: absolute;
+    top: -5%;
+    left: -5%;
+    width: 110%;
+    height: 110%;
+    background: url('photo.jpg') center center / cover no-repeat;
+    filter: blur(20px);
+    animation: bgZoom 30s ease-in-out infinite alternate;
 }
 
-
-/* =========================================
-SECTIONS
-========================================= */
-
-section{
-
-position:absolute;
-
-inset:0;
-
-display:none;
-
-justify-content:center;
-
-align-items:center;
-
-flex-direction:column;
-
-padding:20px;
-
+#bg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        135deg,
+        rgba(26, 26, 46, 0.85) 0%,
+        rgba(22, 33, 62, 0.8) 50%,
+        rgba(26, 26, 46, 0.9) 100%
+    );
 }
 
-.show{
-
-display:flex;
-
-}
-
-
-/* =========================================
-GLASS CARD
-========================================= */
-
-.glass,
-.messageCard{
-
-width:min(90%,430px);
-
-padding:35px;
-
-border-radius:24px;
-
-background:rgba(255,255,255,.08);
-
-backdrop-filter:blur(18px);
-
-border:1px solid rgba(255,255,255,.15);
-
-text-align:center;
-
-box-shadow:0 15px 45px rgba(0,0,0,.4);
-
-}
-
-
-/* =========================================
-TEXT
-========================================= */
-
-h1{
-
-font-size:36px;
-
-margin-bottom:15px;
-
-}
-
-h2{
-
-font-weight:400;
-
-margin-bottom:20px;
-
-color:#ffd7e7;
-
-}
-
-p{
-
-line-height:1.8;
-
-font-size:17px;
-
-}
-
-
-/* =========================================
-BUTTON
-========================================= */
-
-button{
-
-margin-top:28px;
-
-padding:16px 32px;
-
-border:none;
-
-border-radius:50px;
-
-background:#ff4d88;
-
-color:white;
-
-font-size:17px;
-
-font-weight:600;
-
-cursor:pointer;
-
-transition:.3s;
-
-}
-
-button:hover{
-
-transform:scale(1.05);
-
-box-shadow:0 12px 30px rgba(255,77,136,.45);
-
-}
-
-
-/* =========================================
-PHOTO
-========================================= */
-
-#photo{
-
-width:min(90vw,340px);
-
-border-radius:22px;
-
-display:none;
-
-margin-bottom:25px;
-
-box-shadow:0 0 40px rgba(255,255,255,.25);
-
-animation:zoomPhoto 1.2s ease;
-
-}
-
-@keyframes zoomPhoto{
-
-from{
-
-opacity:0;
-
-transform:scale(.8);
-
-}
-
-to{
-
-opacity:1;
-
-transform:scale(1);
-
-}
-
-}
-
-
-/* =========================================
-MESSAGE
-========================================= */
-
-.messageCard{
-
-display:none;
-
-}
-
-#message{
-
-margin-top:15px;
-
-font-size:18px;
-
-line-height:1.9;
-
-white-space:pre-line;
-
-min-height:180px;
-
-}
-
-
-/* =========================================
-VIDEO
-========================================= */
-
-#birthdayVideo{
-
-width:min(95vw,420px);
-
-border-radius:18px;
-
-box-shadow:0 0 35px rgba(255,255,255,.18);
-
-}
-
-
-/* =========================================
-HEARTS
-========================================= */
-
-#hearts{
-
-position:fixed;
-
-inset:0;
-
-pointer-events:none;
-
-overflow:hidden;
-
-}
-
-.heart{
-
-position:absolute;
-
-bottom:-40px;
-
-animation:floatHeart linear forwards;
-
-}
-
-@keyframes floatHeart{
-
-0%{
-
-transform:
-translateY(0)
-scale(.7);
-
-opacity:1;
-
-}
-
-100%{
-
-transform:
-translateY(-120vh)
-scale(1.4);
-
-opacity:0;
-
-}
-
-}
-
-
-/* =========================================
-MOBILE
-========================================= */
-
-@media(max-width:480px){
-
-h1{
-
-font-size:30px;
-
-}
-
-h2{
-
-font-size:22px;
-
-}
-
-p{
-
-font-size:16px;
-
-}
-
-button{
-
-width:100%;
-
-}
-
-#photo{
-
-width:85vw;
-
-}
-
-}
-
-/* ==========================================
-VISIBILITY HELPERS
-========================================== */
-
-#watchBtn{
-    display:none;
-}
-
-#memory{
-    display:none;
-}
-
-#videoPage{
-    display:none;
-    background:#000;
-}
-
-/* Sections become visible when JS adds .show */
-.show{
-    display:flex !important;
-}
-
-/* Smooth fade-in */
-#memory,
-#videoPage{
-    animation:fadeIn 0.8s ease;
-}
-
-@keyframes fadeIn{
-    from{
-        opacity:0;
-        transform:translateY(20px);
+@keyframes bgZoom {
+    0% {
+        transform: scale(1) translate(0, 0);
     }
-    to{
-        opacity:1;
-        transform:translateY(0);
+    100% {
+        transform: scale(1.1) translate(-2%, -2%);
     }
+}
+
+/* ============================================
+   Floating Hearts
+   ============================================ */
+#floating-hearts {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.floating-heart {
+    position: absolute;
+    bottom: -50px;
+    opacity: 0;
+    animation: floatUp linear infinite;
+    font-size: 20px;
+    filter: drop-shadow(0 0 5px rgba(255, 105, 180, 0.5));
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) rotate(0deg) scale(1);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8;
+    }
+    90% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(-110vh) rotate(360deg) scale(0.5);
+        opacity: 0;
+    }
+}
+
+/* ============================================
+   Screens Base
+   ============================================ */
+.screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+    z-index: 10;
+    padding: 20px;
+}
+
+.screen.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ============================================
+   Glassmorphism Cards
+   ============================================ */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 40px 30px;
+    box-shadow: var(--shadow-soft);
+    text-align: center;
+    max-width: 90%;
+    width: 380px;
+    animation: cardFloat 6s ease-in-out infinite;
+}
+
+@keyframes cardFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* ============================================
+   Welcome Screen
+   ============================================ */
+.welcome-card h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 25px;
+    background: linear-gradient(135deg, var(--pink-light), var(--pink-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 30px rgba(255, 105, 180, 0.3);
+}
+
+.welcome-card .greeting {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--white-soft);
+    margin-bottom: 15px;
+}
+
+.welcome-card .message {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.7;
+    margin-bottom: 35px;
+}
+
+/* ============================================
+   Premium Buttons
+   ============================================ */
+.premium-btn {
+    background: linear-gradient(135deg, var(--pink-medium), var(--pink-dark));
+    border: none;
+    border-radius: 50px;
+    padding: 16px 40px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--white);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition-smooth);
+    box-shadow: 0 4px 20px rgba(255, 105, 180, 0.4);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.premium-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    transition: left 0.5s ease;
+}
+
+.premium-btn:hover::before,
+.premium-btn:active::before {
+    left: 100%;
+}
+
+.premium-btn:hover,
+.premium-btn:active {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-glow-pink);
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 4px 20px rgba(255, 105, 180, 0.4);
+    }
+    50% {
+        box-shadow: 0 4px 35px rgba(255, 105, 180, 0.7);
+    }
+}
+
+.premium-btn.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.8);
+}
+
+.premium-btn.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+    animation: buttonReveal 0.6s ease forwards, pulse 2s ease-in-out infinite 0.6s;
+}
+
+@keyframes buttonReveal {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* ============================================
+   Puzzle Screen
+   ============================================ */
+#puzzle-screen {
+    flex-direction: column;
+    padding: 15px;
+}
+
+.puzzle-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+.progress-section {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+#progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--pink-light), var(--pink-dark));
+    border-radius: 10px;
+    transition: width 0.4s ease;
+    box-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+}
+
+#progress-text {
+    font-size: 0.95rem;
+    color: var(--white-soft);
+    text-align: center;
+}
+
+.encouragement {
+    font-size: 1rem;
+    color: var(--pink-light);
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.encouragement.visible {
+    opacity: 1;
+    animation: encouragePop 0.5s ease;
+}
+
+@keyframes encouragePop {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+#puzzle-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 3px;
+    width: 100%;
+    max-width: 360px;
+    aspect-ratio: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 6px;
+    box-shadow: var(--shadow-soft);
+}
+
+.puzzle-piece {
+    aspect-ratio: 1;
+    background-size: 600% 600%;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+}
+
+.puzzle-piece::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    transition: var(--transition-fast);
+}
+
+.puzzle-piece:active:not(.locked):not(.selected) {
+    transform: scale(0.95);
+}
+
+.puzzle-piece.selected {
+    transform: scale(1.08);
+    z-index: 5;
+}
+
+.puzzle-piece.selected::after {
+    box-shadow: inset 0 0 0 3px var(--pink-medium), var(--shadow-glow-pink);
+}
+
+.puzzle-piece.locked {
+    cursor: default;
+}
+
+.puzzle-piece.locked::after {
+    box-shadow: inset 0 0 0 2px rgba(0, 255, 100, 0.7);
+    background: rgba(0, 255, 100, 0.1);
+}
+
+.puzzle-piece.swapping {
+    transition: transform 0.3s ease, background-position 0s;
+}
+
+.puzzle-piece.just-correct {
+    animation: correctPop 0.5s ease;
+}
+
+@keyframes correctPop {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.15);
+        box-shadow: var(--shadow-glow-green);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* ============================================
+   Letter Screen
+   ============================================ */
+#letter-screen {
+    flex-direction: column;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.letter-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    gap: 25px;
+}
+
+.completed-photo {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft), var(--shadow-glow-pink);
+    animation: photoReveal 1s ease;
+}
+
+.completed-photo img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+@keyframes photoReveal {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.letter-card {
+    animation: none;
+    padding: 30px 25px;
+}
+
+.letter-card h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, var(--pink-light), var(--pink-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    min-height: 1.8rem;
+}
+
+.letter-card #letter-content {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 20px;
+    white-space: pre-wrap;
+    min-height: 150px;
+}
+
+.letter-card #letter-signature {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--pink-light);
+    min-height: 1.5rem;
+}
+
+.typewriter-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.2em;
+    background: var(--pink-medium);
+    margin-left: 2px;
+    animation: blink 0.8s infinite;
+    vertical-align: text-bottom;
+}
+
+@keyframes blink {
+    0%, 50% {
+        opacity: 1;
+    }
+    51%, 100% {
+        opacity: 0;
+    }
+}
+
+/* ============================================
+   Video Screen
+   ============================================ */
+#video-screen {
+    background: #000;
+    padding: 0;
+}
+
+.video-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#birthday-video {
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    background: #000;
+}
+
+/* ============================================
+   Confetti Canvas
+   ============================================ */
+#confetti-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+}
+
+/* ============================================
+   Responsive Adjustments
+   ============================================ */
+@media (max-width: 380px) {
+    .glass-card {
+        padding: 30px 20px;
+    }
+
+    .welcome-card h1 {
+        font-size: 1.5rem;
+    }
+
+    .welcome-card .message {
+        font-size: 1rem;
+    }
+
+    #puzzle-grid {
+        gap: 2px;
+        padding: 4px;
+    }
+}
+
+@media (min-width: 600px) {
+    .glass-card {
+        padding: 50px 40px;
+        width: 420px;
+    }
+
+    .welcome-card h1 {
+        font-size: 2.2rem;
+    }
+
+    #puzzle-grid {
+        max-width: 420px;
+    }
+
+    .completed-photo {
+        max-width: 350px;
+    }
+}
+
+@media (min-height: 800px) {
+    .letter-container {
+        gap: 35px;
+    }
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+.hidden {
+    display: none !important;
 }
