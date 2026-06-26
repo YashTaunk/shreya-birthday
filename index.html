@@ -8,9 +8,7 @@
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>
-Happy Birthday ❤️
-</title>
+<title>Happy Birthday ❤️</title>
 
 <link rel="stylesheet"
 href="style.css">
@@ -25,24 +23,19 @@ crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
 rel="stylesheet">
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js">
-</script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
 </head>
 
 <body>
 
-<!-- Floating Hearts -->
+<div id="background"></div>
+
+<div id="overlay"></div>
 
 <div id="hearts"></div>
 
-<!-- ===================================== -->
-<!-- WELCOME SCREEN -->
-<!-- ===================================== -->
-
-<section
-id="welcome"
-class="screen show">
+<section id="welcome" class="show">
 
 <div class="glass">
 
@@ -60,18 +53,17 @@ Dear Shreya
 
 <p>
 
-Every memory has a place.
+Every memory tells a story...
 
 <br><br>
 
-Can you rebuild ours?
+Today I'd like to relive one of my favourites.
 
 </p>
 
-<button
-id="startBtn">
+<button id="startBtn">
 
-Start Puzzle ❤️
+Reveal Our Memory ❤️
 
 </button>
 
@@ -79,67 +71,17 @@ Start Puzzle ❤️
 
 </section>
 
-<!-- ===================================== -->
-<!-- GAME SCREEN -->
-<!-- ===================================== -->
-
-<section
-id="game"
-class="screen">
-
-<div class="top">
-
-<h2>
-
-Rebuild Our Memory ❤️
-
-</h2>
-
-<div class="progressOuter">
-
-<div id="progress">
-
-</div>
-
-</div>
-
-<p id="progressText">
-
-0 / 36 Memories Restored ❤️
-
-</p>
-
-<p id="milestone">
-
-</p>
-
-</div>
-
-<div
-id="puzzle">
-
-</div>
-
-</section>
-
-<!-- ===================================== -->
-<!-- REVEAL SCREEN -->
-<!-- ===================================== -->
-
-<section
-id="reveal"
-class="screen">
-
-<div class="glass revealCard">
+<section id="memory">
 
 <img
-id="finalPhoto"
-src="photo.jpg"
-alt="Our Memory">
+id="photo"
+src="photo.jpg">
+
+<div class="messageCard">
 
 <h1>
 
-🎂 Happy Birthday Shreya ❤️
+🎂 Happy Birthday ❤️
 
 </h1>
 
@@ -147,8 +89,7 @@ alt="Our Memory">
 
 </p>
 
-<button
-id="watchBtn">
+<button id="watchBtn">
 
 ❤️ Watch Your Surprise
 
@@ -158,19 +99,12 @@ id="watchBtn">
 
 </section>
 
-<!-- ===================================== -->
-<!-- VIDEO SCREEN -->
-<!-- ===================================== -->
-
-<section
-id="videoScreen"
-class="screen">
+<section id="videoPage">
 
 <video
 id="birthdayVideo"
 controls
-playsinline
-preload="auto">
+playsinline>
 
 <source
 src="birthday.mp4"
@@ -180,29 +114,7 @@ type="video/mp4">
 
 </section>
 
-<!-- ===================================== -->
-<!-- LOADING SCREEN -->
-<!-- ===================================== -->
-
-<div
-id="loadingScreen">
-
-<div class="loader">
-
-</div>
-
-<p>
-
-Preparing your surprise...
-
-</p>
-
-</div>
-
-<script
-src="script.js">
-
-</script>
+<script src="script.js"></script>
 
 </body>
 
