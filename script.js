@@ -277,7 +277,7 @@ I love you endlessly.`,
             checkPieceCorrectness(piece2, pos2);
 
             // Check if puzzle is solved
-            if (state.solvedCount === CONFIG.TOTAL_PIECES) {
+            if (state.puzzlePieces.every((piece, index) => piece === index)) {
                 puzzleSolved();
             }
         }, 300);
@@ -333,32 +333,48 @@ I love you endlessly.`,
     /* ----------------------------------------
        Puzzle Completion Effects
        ---------------------------------------- */
-    function puzzleSolved() {
-        state.isPuzzleSolved = true;
+function puzzleSolved() {
 
-        // Disable all pieces
-        const pieces = elements.puzzleGrid.querySelectorAll('.puzzle-piece');
-        pieces.forEach(piece => {
-            piece.style.pointerEvents = 'none';
-        });
+    if (state.isPuzzleSolved) return;
 
-        // Animate puzzle merge
-        animatePuzzleComplete();
+    state.isPuzzleSolved = true;
 
-        // Launch confetti
+    const pieces =
+    document.querySelectorAll(".puzzle-piece");
+
+    pieces.forEach(piece=>{
+        piece.style.pointerEvents="none";
+    });
+
+    try{
+
         launchConfetti();
 
-        // Launch extra floating hearts
-        for (let i = 0; i < 20; i++) {
-            setTimeout(createFloatingHeart, i * 100);
-        }
+    }catch(e){
 
-        // Transition to letter screen after delay
-        setTimeout(() => {
-            transitionToScreen('letter');
-            setTimeout(startTypewriter, 800);
-        }, 2500);
+        console.log(e);
+
     }
+
+    for(let i=0;i<25;i++){
+
+        setTimeout(createFloatingHeart,i*120);
+
+    }
+
+    setTimeout(()=>{
+
+        transitionToScreen("letter");
+
+        setTimeout(()=>{
+
+            startTypewriter();
+
+        },600);
+
+    },1800);
+
+}
 
     function animatePuzzleComplete() {
         const grid = elements.puzzleGrid;
@@ -424,43 +440,34 @@ I love you endlessly.`,
         });
     }
 
-    function typeText(element, text, callback) {
-        let index = 0;
-        element.textContent = '';
-        
-        // Add cursor
-        const cursor = document.createElement('span');
-        cursor.className = 'typewriter-cursor';
-        element.appendChild(cursor);
 
-        function type() {
-            if (index < text.length) {
-                // Insert character before cursor
-                const char = text.charAt(index);
-                const textNode = document.createTextNode(char);
-                element.insertBefore(textNode, cursor);
-                index++;
+function typeText(element,text,callback){
 
-                // Variable speed for natural feel
-                let delay = CONFIG.TYPEWRITER_SPEED;
-                if (char === '.' || char === '!' || char === '?') {
-                    delay = 300;
-                } else if (char === ',' || char === '\n') {
-                    delay = 150;
-                }
+    element.textContent="";
 
-                setTimeout(type, delay);
-            } else {
-                // Remove cursor and call callback
-                setTimeout(() => {
-                    cursor.remove();
-                    if (callback) callback();
-                }, 300);
-            }
+    let i=0;
+
+    function type(){
+
+        if(i>=text.length){
+
+            if(callback) callback();
+
+            return;
+
         }
 
-        type();
+        element.textContent+=text.charAt(i);
+
+        i++;
+
+        setTimeout(type,35);
+
     }
+
+    type();
+
+}
 
     /* ----------------------------------------
        Video Screen
