@@ -284,7 +284,6 @@ function celebrateSound(){
     }
 
     function swapPieces(pos1, pos2) {
-       playTone(380,70,"square",0.05);
         const pieces = elements.puzzleGrid.querySelectorAll('.puzzle-piece');
         const piece1 = pieces[pos1];
         const piece2 = pieces[pos2];
@@ -325,6 +324,7 @@ function celebrateSound(){
                 puzzleSolved();
             }
         }, 300);
+         playTone(380,70,"square",0.05);
     }
 
     function checkPieceCorrectness(piece, gridPos) {
