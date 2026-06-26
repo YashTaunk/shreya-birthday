@@ -258,7 +258,7 @@ function celebrateSound(){
     }
 
     function handlePieceClick(piece) {
-       playTone(550,45,"triangle",0.05);f
+       
         if (state.isPuzzleSolved) return;
 
         const gridPosition = parseInt(piece.dataset.gridPosition);
@@ -269,6 +269,7 @@ function celebrateSound(){
         }
 
         if (state.selectedPiece === null) {
+           playTone(550,45,"triangle",0.05);
             // Select first piece
             state.selectedPiece = gridPosition;
             piece.classList.add('selected');
