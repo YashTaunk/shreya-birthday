@@ -1,153 +1,544 @@
-const welcome = document.getElementById("welcome");
-const memory = document.getElementById("memory");
-const background = document.getElementById("background");
+/* ============================================
+   Birthday Surprise Website
+   Vanilla JavaScript - Mobile Optimized
+   ============================================ */
 
-const photo = document.getElementById("photo");
-const card = document.querySelector(".messageCard");
+(function() {
+    'use strict';
 
-const message = document.getElementById("message");
+    /* ----------------------------------------
+       Configuration
+       ---------------------------------------- */
+    const CONFIG = {
+        GRID_SIZE: 6,
+        TOTAL_PIECES: 36,
+        TYPEWRITER_SPEED: 50,
+        ENCOURAGEMENT_MESSAGES: {
+            10: '❤️ You\'re doing great!',
+            20: '✨ Halfway there!',
+            30: '💕 Just a few memories left!'
+        },
+        LETTER: {
+            title: 'Happy Birthday Shreya ❤️',
+            content: `Every piece of this puzzle reminds me of another beautiful memory we've created together.
 
-const startBtn = document.getElementById("startBtn");
-const watchBtn = document.getElementById("watchBtn");
+Thank you for making my life brighter, happier and complete.
 
-const videoPage = document.getElementById("videoPage");
-const birthdayVideo = document.getElementById("birthdayVideo");
+I hope today brings you as much happiness as you bring into my life.
 
-const birthdayMessage = `Happy Birthday Shreya ❤️
+I love you endlessly.`,
+            signature: 'Love,\nYash ❤️'
+        }
+    };
 
-Every moment with you has become one of my favourite memories.
+    /* ----------------------------------------
+       State Management
+       ---------------------------------------- */
+    const state = {
+        currentScreen: 'welcome',
+        puzzlePieces: [],
+        correctPositions: [],
+        selectedPiece: null,
+        solvedCount: 0,
+        isPuzzleSolved: false,
+        lastEncouragement: 0,
+        animationFrameId: null
+    };
 
-You make ordinary days feel special,
-and special days unforgettable.
+    /* ----------------------------------------
+       DOM Elements Cache
+       ---------------------------------------- */
+    const elements = {};
 
-Thank you for always being by my side,
-for your smile,
-your kindness,
-and your endless love.
+    function cacheElements() {
+        elements.welcomeScreen = document.getElementById('welcome-screen');
+        elements.puzzleScreen = document.getElementById('puzzle-screen');
+        elements.letterScreen = document.getElementById('letter-screen');
+        elements.videoScreen = document.getElementById('video-screen');
+        elements.startBtn = document.getElementById('start-btn');
+        elements.puzzleGrid = document.getElementById('puzzle-grid');
+        elements.progressFill = document.getElementById('progress-fill');
+        elements.progressText = document.getElementById('progress-text');
+        elements.encouragement = document.getElementById('encouragement');
+        elements.letterTitle = document.getElementById('letter-title');
+        elements.letterContent = document.getElementById('letter-content');
+        elements.letterSignature = document.getElementById('letter-signature');
+        elements.videoBtn = document.getElementById('video-btn');
+        elements.birthdayVideo = document.getElementById('birthday-video');
+        elements.floatingHearts = document.getElementById('floating-hearts');
+        elements.completedImage = document.getElementById('completed-image');
+    }
 
-I hope this year brings you
-all the happiness you deserve.
+    /* ----------------------------------------
+       Screen Transitions
+       ---------------------------------------- */
+    function transitionToScreen(screenName) {
+        const screens = {
+            welcome: elements.welcomeScreen,
+            puzzle: elements.puzzleScreen,
+            letter: elements.letterScreen,
+            video: elements.videoScreen
+        };
 
-May every dream come true,
-every smile stay forever,
-and every day remind you
-how deeply loved you are.
+        // Remove active class from current screen
+        Object.values(screens).forEach(screen => {
+            screen.classList.remove('active');
+        });
 
-Happy Birthday once again ❤️
+        // Add active class to new screen
+        if (screens[screenName]) {
+            setTimeout(() => {
+                screens[screenName].classList.add('active');
+            }, 100);
+        }
 
-Love,
-Yash ❤️`;
+        state.currentScreen = screenName;
+    }
 
-startBtn.onclick = () => {
+    /* ----------------------------------------
+       Floating Hearts Animation
+       ---------------------------------------- */
+    function createFloatingHeart() {
+        const heart = document.createElement('span');
+        heart.className = 'floating-heart';
+        heart.textContent = ['❤️', '💕', '💗', '💖', '💝'][Math.floor(Math.random() * 5)];
+        
+        const size = Math.random() * 15 + 12;
+        const left = Math.random() * 100;
+        const duration = Math.random() * 8 + 10;
+        const delay = Math.random() * 2;
 
-    welcome.classList.remove("show");
+        heart.style.cssText = `
+            left: ${left}%;
+            font-size: ${size}px;
+            animation-duration: ${duration}s;
+            animation-delay: ${delay}s;
+        `;
 
-    memory.classList.add("show");
+        elements.floatingHearts.appendChild(heart);
 
-    background.classList.add("clear");
+        // Remove heart after animation completes
+        setTimeout(() => {
+            if (heart.parentNode) {
+                heart.parentNode.removeChild(heart);
+            }
+        }, (duration + delay) * 1000);
+    }
 
-    setTimeout(() => {
+    function startFloatingHearts() {
+        // Create initial hearts
+        for (let i = 0; i < 5; i++) {
+            setTimeout(createFloatingHeart, i * 500);
+        }
 
-        photo.style.display = "block";
+        // Continuously create hearts
+        setInterval(createFloatingHeart, 2000);
+    }
 
-    },1000);
+    /* ----------------------------------------
+       Puzzle Logic
+       ---------------------------------------- */
+    function initializePuzzle() {
+        const positions = [];
+        for (let i = 0; i < CONFIG.TOTAL_PIECES; i++) {
+            positions.push(i);
+        }
 
-    setTimeout(() => {
+        // Shuffle positions (Fisher-Yates)
+        for (let i = positions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [positions[i], positions[j]] = [positions[j], positions[i]];
+        }
 
-        card.style.display = "block";
+        // Ensure puzzle is solvable by checking inversions
+        // For a 6x6 puzzle, if inversions are odd and blank is on odd row from bottom, it's solvable
+        // Since we don't have a blank tile, we just need even inversions
+        let inversions = 0;
+        for (let i = 0; i < positions.length; i++) {
+            for (let j = i + 1; j < positions.length; j++) {
+                if (positions[i] > positions[j]) {
+                    inversions++;
+                }
+            }
+        }
 
-        typeWriter();
+        // If odd inversions, swap first two pieces
+        if (inversions % 2 !== 0) {
+            [positions[0], positions[1]] = [positions[1], positions[0]];
+        }
 
-        celebrate();
+        state.puzzlePieces = positions;
+        state.correctPositions = new Array(CONFIG.TOTAL_PIECES).fill(false);
+        
+        renderPuzzle();
+        checkInitialCorrectPieces();
+    }
 
-    },1800);
+    function renderPuzzle() {
+        elements.puzzleGrid.innerHTML = '';
 
-};
+        state.puzzlePieces.forEach((pieceIndex, gridPosition) => {
+            const piece = document.createElement('div');
+            piece.className = 'puzzle-piece';
+            piece.dataset.gridPosition = gridPosition;
+            piece.dataset.pieceIndex = pieceIndex;
 
-function typeWriter(){
+            // Calculate background position
+            const row = Math.floor(pieceIndex / CONFIG.GRID_SIZE);
+            const col = pieceIndex % CONFIG.GRID_SIZE;
+            const bgPosX = col * 20;
+            const bgPosY = row * 20;
 
-    let i=0;
+            piece.style.backgroundImage = 'url(photo.jpg)';
+            piece.style.backgroundPosition = `${bgPosX}% ${bgPosY}%`;
 
-    message.innerHTML="";
+            piece.addEventListener('click', () => handlePieceClick(piece));
+            piece.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                handlePieceClick(piece);
+            });
 
-    const timer=setInterval(()=>{
+            elements.puzzleGrid.appendChild(piece);
+        });
+    }
 
-        if(i>=birthdayMessage.length){
+    function checkInitialCorrectPieces() {
+        const pieces = elements.puzzleGrid.querySelectorAll('.puzzle-piece');
+        pieces.forEach((piece, gridPos) => {
+            const pieceIndex = parseInt(piece.dataset.pieceIndex);
+            if (pieceIndex === gridPos) {
+                state.correctPositions[gridPos] = true;
+                piece.classList.add('locked');
+                state.solvedCount++;
+            }
+        });
+        updateProgress();
+    }
 
-            clearInterval(timer);
+    function handlePieceClick(piece) {
+        if (state.isPuzzleSolved) return;
 
-            watchBtn.style.display="inline-block";
+        const gridPosition = parseInt(piece.dataset.gridPosition);
 
+        // Check if piece is locked
+        if (state.correctPositions[gridPosition]) {
             return;
-
         }
 
-        if(birthdayMessage[i]=="\n"){
+        if (state.selectedPiece === null) {
+            // Select first piece
+            state.selectedPiece = gridPosition;
+            piece.classList.add('selected');
+        } else if (state.selectedPiece === gridPosition) {
+            // Deselect same piece
+            piece.classList.remove('selected');
+            state.selectedPiece = null;
+        } else {
+            // Swap pieces
+            swapPieces(state.selectedPiece, gridPosition);
+            state.selectedPiece = null;
+        }
+    }
 
-            message.innerHTML+="<br>";
+    function swapPieces(pos1, pos2) {
+        const pieces = elements.puzzleGrid.querySelectorAll('.puzzle-piece');
+        const piece1 = pieces[pos1];
+        const piece2 = pieces[pos2];
 
+        // Remove selected state
+        piece1.classList.remove('selected');
+        piece2.classList.remove('selected');
+
+        // Add swapping animation class
+        piece1.classList.add('swapping');
+        piece2.classList.add('swapping');
+
+        // Swap background positions visually
+        const tempBgPos = piece1.style.backgroundPosition;
+        const tempPieceIndex = piece1.dataset.pieceIndex;
+
+        piece1.style.backgroundPosition = piece2.style.backgroundPosition;
+        piece1.dataset.pieceIndex = piece2.dataset.pieceIndex;
+
+        piece2.style.backgroundPosition = tempBgPos;
+        piece2.dataset.pieceIndex = tempPieceIndex;
+
+        // Update state array
+        [state.puzzlePieces[pos1], state.puzzlePieces[pos2]] = 
+        [state.puzzlePieces[pos2], state.puzzlePieces[pos1]];
+
+        // Remove animation class after transition
+        setTimeout(() => {
+            piece1.classList.remove('swapping');
+            piece2.classList.remove('swapping');
+
+            // Check if pieces are now in correct position
+            checkPieceCorrectness(piece1, pos1);
+            checkPieceCorrectness(piece2, pos2);
+
+            // Check if puzzle is solved
+            if (state.solvedCount === CONFIG.TOTAL_PIECES) {
+                puzzleSolved();
+            }
+        }, 300);
+    }
+
+    function checkPieceCorrectness(piece, gridPos) {
+        const pieceIndex = parseInt(piece.dataset.pieceIndex);
+        const wasCorrect = state.correctPositions[gridPos];
+        const isCorrect = pieceIndex === gridPos;
+
+        if (isCorrect && !wasCorrect) {
+            state.correctPositions[gridPos] = true;
+            state.solvedCount++;
+            piece.classList.add('locked', 'just-correct');
+            setTimeout(() => piece.classList.remove('just-correct'), 500);
+            updateProgress();
+            checkEncouragement();
+        } else if (!isCorrect && wasCorrect) {
+            // This shouldn't happen since locked pieces can't be moved
+            state.correctPositions[gridPos] = false;
+            state.solvedCount--;
+            piece.classList.remove('locked');
+            updateProgress();
+        }
+    }
+
+    function updateProgress() {
+        const percentage = (state.solvedCount / CONFIG.TOTAL_PIECES) * 100;
+        elements.progressFill.style.width = `${percentage}%`;
+        elements.progressText.textContent = `❤️ ${state.solvedCount} / ${CONFIG.TOTAL_PIECES} Memories Restored`;
+    }
+
+    function checkEncouragement() {
+        const thresholds = [10, 20, 30];
+        for (const threshold of thresholds) {
+            if (state.solvedCount >= threshold && state.lastEncouragement < threshold) {
+                showEncouragement(CONFIG.ENCOURAGEMENT_MESSAGES[threshold]);
+                state.lastEncouragement = threshold;
+                break;
+            }
+        }
+    }
+
+    function showEncouragement(message) {
+        elements.encouragement.textContent = message;
+        elements.encouragement.classList.add('visible');
+
+        setTimeout(() => {
+            elements.encouragement.classList.remove('visible');
+        }, 3000);
+    }
+
+    /* ----------------------------------------
+       Puzzle Completion Effects
+       ---------------------------------------- */
+    function puzzleSolved() {
+        state.isPuzzleSolved = true;
+
+        // Disable all pieces
+        const pieces = elements.puzzleGrid.querySelectorAll('.puzzle-piece');
+        pieces.forEach(piece => {
+            piece.style.pointerEvents = 'none';
+        });
+
+        // Animate puzzle merge
+        animatePuzzleComplete();
+
+        // Launch confetti
+        launchConfetti();
+
+        // Launch extra floating hearts
+        for (let i = 0; i < 20; i++) {
+            setTimeout(createFloatingHeart, i * 100);
         }
 
-        else{
+        // Transition to letter screen after delay
+        setTimeout(() => {
+            transitionToScreen('letter');
+            setTimeout(startTypewriter, 800);
+        }, 2500);
+    }
 
-            message.innerHTML+=birthdayMessage[i];
+    function animatePuzzleComplete() {
+        const grid = elements.puzzleGrid;
+        grid.style.transition = 'transform 0.8s ease, filter 0.8s ease, box-shadow 0.8s ease';
+        grid.style.transform = 'scale(1.02)';
+        grid.style.filter = 'brightness(1.1)';
+        grid.style.boxShadow = '0 0 50px rgba(255, 105, 180, 0.6)';
 
+        setTimeout(() => {
+            grid.style.transform = 'scale(1)';
+        }, 800);
+    }
+
+    function launchConfetti() {
+        const defaults = {
+            spread: 360,
+            ticks: 100,
+            gravity: 0.8,
+            decay: 0.94,
+            startVelocity: 30,
+            colors: ['#ff69b4', '#ffb6c1', '#ff1493', '#ffffff', '#ffd700']
+        };
+
+        function fire(particleRatio, opts) {
+            confetti({
+                ...defaults,
+                particleCount: Math.floor(200 * particleRatio),
+                origin: { y: 0.6 },
+                ...opts
+            });
         }
 
-        i++;
+        fire(0.25, { spread: 26, startVelocity: 55 });
+        fire(0.2, { spread: 60 });
+        fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+        fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+        fire(0.1, { spread: 120, startVelocity: 45 });
 
-    },28);
+        // Second burst after delay
+        setTimeout(() => {
+            fire(0.25, { spread: 26, startVelocity: 55 });
+            fire(0.2, { spread: 60 });
+            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+        }, 500);
+    }
 
-}
+    /* ----------------------------------------
+       Typewriter Effect
+       ---------------------------------------- */
+    function startTypewriter() {
+        const letter = CONFIG.LETTER;
+        
+        typeText(elements.letterTitle, letter.title, () => {
+            typeText(elements.letterContent, letter.content, () => {
+                typeText(elements.letterSignature, letter.signature, () => {
+                    // Show video button after typing completes
+                    setTimeout(() => {
+                        elements.videoBtn.classList.remove('hidden');
+                        elements.videoBtn.classList.add('visible');
+                    }, 500);
+                });
+            });
+        });
+    }
 
-watchBtn.style.display="none";
+    function typeText(element, text, callback) {
+        let index = 0;
+        element.textContent = '';
+        
+        // Add cursor
+        const cursor = document.createElement('span');
+        cursor.className = 'typewriter-cursor';
+        element.appendChild(cursor);
 
-watchBtn.onclick=()=>{
+        function type() {
+            if (index < text.length) {
+                // Insert character before cursor
+                const char = text.charAt(index);
+                const textNode = document.createTextNode(char);
+                element.insertBefore(textNode, cursor);
+                index++;
 
-    memory.classList.remove("show");
+                // Variable speed for natural feel
+                let delay = CONFIG.TYPEWRITER_SPEED;
+                if (char === '.' || char === '!' || char === '?') {
+                    delay = 300;
+                } else if (char === ',' || char === '\n') {
+                    delay = 150;
+                }
 
-    videoPage.classList.add("show");
+                setTimeout(type, delay);
+            } else {
+                // Remove cursor and call callback
+                setTimeout(() => {
+                    cursor.remove();
+                    if (callback) callback();
+                }, 300);
+            }
+        }
 
-    birthdayVideo.play();
+        type();
+    }
 
-};
+    /* ----------------------------------------
+       Video Screen
+       ---------------------------------------- */
+    function showVideoScreen() {
+        transitionToScreen('video');
 
-function celebrate(){
+        setTimeout(() => {
+            const video = elements.birthdayVideo;
+            
+            // Try to play video
+            video.play().catch(() => {
+                // Autoplay blocked, user needs to tap play
+            });
 
-    confetti({
+            // Try to enter fullscreen
+            try {
+                if (video.requestFullscreen) {
+                    video.requestFullscreen().catch(() => {});
+                } else if (video.webkitRequestFullscreen) {
+                    video.webkitRequestFullscreen();
+                } else if (video.webkitEnterFullscreen) {
+                    video.webkitEnterFullscreen();
+                }
+            } catch (e) {
+                // Fullscreen not supported or blocked
+            }
+        }, 800);
+    }
 
-        particleCount:250,
+    /* ----------------------------------------
+       Event Listeners
+       ---------------------------------------- */
+    function setupEventListeners() {
+        // Start button
+        elements.startBtn.addEventListener('click', () => {
+            transitionToScreen('puzzle');
+            setTimeout(initializePuzzle, 500);
+        });
 
-        spread:140,
+        // Video button
+        elements.videoBtn.addEventListener('click', showVideoScreen);
 
-        origin:{y:.6}
+        // Prevent zoom on double tap
+        document.addEventListener('touchstart', (e) => {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
 
-    });
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, { passive: false });
+    }
 
-    setInterval(createHeart,350);
+    /* ----------------------------------------
+       Initialization
+       ---------------------------------------- */
+    function init() {
+        cacheElements();
+        setupEventListeners();
+        startFloatingHearts();
 
-}
+        // Preload image
+        const img = new Image();
+        img.src = 'photo.jpg';
+    }
 
-function createHeart(){
+    // Start when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
 
-    const heart=document.createElement("div");
-
-    heart.className="heart";
-
-    heart.innerHTML="❤️";
-
-    heart.style.left=Math.random()*100+"vw";
-
-    heart.style.fontSize=(18+Math.random()*18)+"px";
-
-    heart.style.animationDuration=(5+Math.random()*3)+"s";
-
-    document.getElementById("hearts").appendChild(heart);
-
-    setTimeout(()=>{
-
-        heart.remove();
-
-    },8000);
-
-}
+})();
