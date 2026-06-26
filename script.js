@@ -1,105 +1,153 @@
+const welcome = document.getElementById("welcome");
+const memory = document.getElementById("memory");
+const background = document.getElementById("background");
+
+const photo = document.getElementById("photo");
+const card = document.querySelector(".messageCard");
+
+const message = document.getElementById("message");
+
 const startBtn = document.getElementById("startBtn");
-const welcome = document.getElementById("welcomeScreen");
-const game = document.getElementById("gameScreen");
-const message = document.getElementById("messageScreen");
+const watchBtn = document.getElementById("watchBtn");
 
-const puzzle = document.getElementById("puzzle");
-const progressBar = document.getElementById("progressBar");
+const videoPage = document.getElementById("videoPage");
+const birthdayVideo = document.getElementById("birthdayVideo");
 
-const rows = 4;
-const cols = 4;
-const total = rows * cols;
+const birthdayMessage = `Happy Birthday Shreya ❤️
 
-let pieces = [];
-let first = null;
+Every moment with you has become one of my favourite memories.
+
+You make ordinary days feel special,
+and special days unforgettable.
+
+Thank you for always being by my side,
+for your smile,
+your kindness,
+and your endless love.
+
+I hope this year brings you
+all the happiness you deserve.
+
+May every dream come true,
+every smile stay forever,
+and every day remind you
+how deeply loved you are.
+
+Happy Birthday once again ❤️
+
+Love,
+Yash ❤️`;
 
 startBtn.onclick = () => {
-    welcome.classList.add("hidden");
-    game.classList.remove("hidden");
-    createPuzzle();
+
+    welcome.classList.remove("show");
+
+    memory.classList.add("show");
+
+    background.classList.add("clear");
+
+    setTimeout(() => {
+
+        photo.style.display = "block";
+
+    },1000);
+
+    setTimeout(() => {
+
+        card.style.display = "block";
+
+        typeWriter();
+
+        celebrate();
+
+    },1800);
+
 };
 
-function createPuzzle(){
+function typeWriter(){
 
-    pieces = [];
+    let i=0;
 
-    for(let i=0;i<total;i++){
-        pieces.push(i);
-    }
+    message.innerHTML="";
 
-    pieces.sort(()=>Math.random()-0.5);
+    const timer=setInterval(()=>{
 
-    render();
-}
+        if(i>=birthdayMessage.length){
 
-function render(){
+            clearInterval(timer);
 
-    puzzle.innerHTML = "";
+            watchBtn.style.display="inline-block";
 
-    let correct = 0;
+            return;
 
-    pieces.forEach((piece,index)=>{
-
-        if(piece===index){
-            correct++;
         }
 
-        const tile = document.createElement("div");
+        if(birthdayMessage[i]=="\n"){
 
-        tile.className = "tile";
+            message.innerHTML+="<br>";
 
-        tile.style.backgroundImage = "url('photo.jpg')";
-        tile.style.backgroundSize = "320px 320px";
+        }
 
-        const x = (piece % cols) * -80;
-        const y = Math.floor(piece / cols) * -80;
+        else{
 
-        tile.style.backgroundPosition = `${x}px ${y}px`;
+            message.innerHTML+=birthdayMessage[i];
 
-        tile.onclick = () => swap(index);
+        }
 
-        puzzle.appendChild(tile);
-    });
+        i++;
 
-    progressBar.style.width =
-        `${(correct/total)*100}%`;
+    },28);
 
-    if(correct===total){
-        finishPuzzle();
-    }
 }
 
-function swap(index){
+watchBtn.style.display="none";
 
-    if(first===null){
-        first=index;
-        return;
-    }
+watchBtn.onclick=()=>{
 
-    [pieces[first], pieces[index]] =
-    [pieces[index], pieces[first]];
+    memory.classList.remove("show");
 
-    first=null;
+    videoPage.classList.add("show");
 
-    render();
-}
+    birthdayVideo.play();
 
-function finishPuzzle(){
+};
 
-    game.classList.add("hidden");
-
-    message.classList.remove("hidden");
+function celebrate(){
 
     confetti({
-        particleCount: 300,
-        spread: 120,
-        origin:{y:0.6}
+
+        particleCount:250,
+
+        spread:140,
+
+        origin:{y:.6}
+
     });
 
-    setInterval(()=>{
-        confetti({
-            particleCount:80,
-            spread:100
-        });
-    },3000);
+    setInterval(createHeart,350);
+
+}
+
+function createHeart(){
+
+    const heart=document.createElement("div");
+
+    heart.className="heart";
+
+    heart.innerHTML="❤️";
+
+    heart.style.left=Math.random()*100+"vw";
+
+    heart.style.fontSize=(18+Math.random()*18)+"px";
+
+    heart.style.animationDuration=(5+Math.random()*3)+"s";
+
+    document.getElementById("hearts").appendChild(heart);
+
+    setTimeout(()=>{
+
+        heart.remove();
+
+    },8000);
+
 }
