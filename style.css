@@ -1,6 +1,6 @@
-/* ==========================================
-   GLOBAL
-========================================== */
+/* =========================================
+GLOBAL
+========================================= */
 
 *{
 margin:0;
@@ -11,47 +11,81 @@ font-family:'Poppins',sans-serif;
 
 body{
 
-background:#0f172a;
+background:#000;
 
-background-image:
-linear-gradient(rgba(15,23,42,.78),
-rgba(15,23,42,.78)),
-url("photo.jpg");
+color:white;
+
+overflow:hidden;
+
+}
+
+
+/* =========================================
+BACKGROUND
+========================================= */
+
+#background{
+
+position:fixed;
+
+inset:0;
+
+background:url("photo.jpg");
 
 background-size:cover;
 
 background-position:center;
 
-background-attachment:fixed;
+filter:blur(20px);
 
-color:white;
+transform:scale(1.12);
 
-overflow-x:hidden;
+transition:all 3s ease;
 
-min-height:100vh;
+z-index:-3;
+
+}
+
+#background.clear{
+
+filter:blur(0);
+
+transform:scale(1);
+
+}
+
+#overlay{
+
+position:fixed;
+
+inset:0;
+
+background:rgba(0,0,0,.45);
+
+z-index:-2;
 
 }
 
 
-/* ==========================================
-SCREENS
-========================================== */
+/* =========================================
+SECTIONS
+========================================= */
 
-.screen{
+section{
+
+position:absolute;
+
+inset:0;
 
 display:none;
-
-min-height:100vh;
-
-width:100%;
-
-padding:25px;
 
 justify-content:center;
 
 align-items:center;
 
 flex-direction:column;
+
+padding:20px;
 
 }
 
@@ -62,42 +96,39 @@ display:flex;
 }
 
 
-/* ==========================================
+/* =========================================
 GLASS CARD
-========================================== */
+========================================= */
 
-.glass{
+.glass,
+.messageCard{
 
-width:min(92%,430px);
+width:min(90%,430px);
 
 padding:35px;
 
-border-radius:25px;
+border-radius:24px;
 
 background:rgba(255,255,255,.08);
 
 backdrop-filter:blur(18px);
 
-border:1px solid
-rgba(255,255,255,.15);
-
-box-shadow:
-
-0 15px 45px
-rgba(0,0,0,.45);
+border:1px solid rgba(255,255,255,.15);
 
 text-align:center;
+
+box-shadow:0 15px 45px rgba(0,0,0,.4);
 
 }
 
 
-/* ==========================================
-HEADINGS
-========================================== */
+/* =========================================
+TEXT
+========================================= */
 
 h1{
 
-font-size:34px;
+font-size:36px;
 
 margin-bottom:15px;
 
@@ -109,7 +140,7 @@ font-weight:400;
 
 margin-bottom:20px;
 
-color:#ffd4e5;
+color:#ffd7e7;
 
 }
 
@@ -122,15 +153,15 @@ font-size:17px;
 }
 
 
-/* ==========================================
+/* =========================================
 BUTTON
-========================================== */
+========================================= */
 
 button{
 
-margin-top:30px;
+margin-top:28px;
 
-padding:16px 30px;
+padding:16px 32px;
 
 border:none;
 
@@ -146,7 +177,7 @@ font-weight:600;
 
 cursor:pointer;
 
-transition:.25s;
+transition:.3s;
 
 }
 
@@ -154,188 +185,28 @@ button:hover{
 
 transform:scale(1.05);
 
-box-shadow:
-
-0 10px 25px
-
-rgba(255,77,136,.4);
+box-shadow:0 12px 30px rgba(255,77,136,.45);
 
 }
 
 
-/* ==========================================
-TOP BAR
-========================================== */
+/* =========================================
+PHOTO
+========================================= */
 
-.top{
+#photo{
 
-width:min(95%,450px);
+width:min(90vw,340px);
 
-text-align:center;
+border-radius:22px;
+
+display:none;
 
 margin-bottom:25px;
 
-}
+box-shadow:0 0 40px rgba(255,255,255,.25);
 
-.progressOuter{
-
-height:12px;
-
-background:#334155;
-
-border-radius:50px;
-
-overflow:hidden;
-
-margin:18px 0;
-
-}
-
-#progress{
-
-width:0%;
-
-height:100%;
-
-background:
-
-linear-gradient(
-90deg,
-#ec4899,
-#fb7185);
-
-transition:.4s;
-
-}
-
-#progressText{
-
-font-size:15px;
-
-}
-
-#milestone{
-
-margin-top:10px;
-
-font-size:16px;
-
-color:#fcd34d;
-
-min-height:22px;
-
-}
-
-/* ==========================================
-PUZZLE GRID
-========================================== */
-
-#puzzle{
-
-display:grid;
-
-grid-template-columns:repeat(6,1fr);
-
-grid-template-rows:repeat(6,1fr);
-
-width:min(92vw,420px);
-
-height:min(92vw,420px);
-
-gap:3px;
-
-margin:auto;
-
-border-radius:15px;
-
-overflow:hidden;
-
-background:rgba(255,255,255,.08);
-
-box-shadow:
-0 15px 40px rgba(0,0,0,.45);
-
-}
-
-
-/* ==========================================
-PUZZLE PIECE
-========================================== */
-
-.piece{
-
-width:100%;
-
-height:100%;
-
-cursor:pointer;
-
-background-repeat:no-repeat;
-
-transition:
-transform .25s,
-box-shadow .25s;
-
-border-radius:5px;
-
-user-select:none;
-
-}
-
-.piece:hover{
-
-transform:scale(1.04);
-
-}
-
-
-/* Selected Piece */
-
-.selected{
-
-outline:3px solid #ff4d88;
-
-transform:scale(1.08);
-
-box-shadow:
-
-0 0 18px
-
-rgba(255,77,136,.7);
-
-}
-
-
-/* Correct Piece */
-
-.correct{
-
-outline:2px solid #22c55e;
-
-cursor:default;
-
-}
-
-
-/* ==========================================
-FINAL PHOTO
-========================================== */
-
-#finalPhoto{
-
-width:220px;
-
-border-radius:20px;
-
-margin-bottom:25px;
-
-box-shadow:
-
-0 0 35px
-
-rgba(255,255,255,.25);
-
-animation:zoomPhoto 2s ease;
+animation:zoomPhoto 1.2s ease;
 
 }
 
@@ -343,66 +214,66 @@ animation:zoomPhoto 2s ease;
 
 from{
 
-transform:scale(.8);
-
 opacity:0;
+
+transform:scale(.8);
 
 }
 
 to{
 
-transform:scale(1);
-
 opacity:1;
 
-}
+transform:scale(1);
 
 }
 
+}
 
-/* ==========================================
+
+/* =========================================
 MESSAGE
-========================================== */
+========================================= */
+
+.messageCard{
+
+display:none;
+
+}
 
 #message{
 
-margin-top:20px;
+margin-top:15px;
 
 font-size:18px;
 
 line-height:1.9;
 
-min-height:170px;
-
 white-space:pre-line;
+
+min-height:180px;
 
 }
 
 
-/* ==========================================
+/* =========================================
 VIDEO
-========================================== */
+========================================= */
 
 #birthdayVideo{
 
-width:min(95%,420px);
+width:min(95vw,420px);
 
 border-radius:18px;
 
-background:black;
-
-box-shadow:
-
-0 0 40px
-
-rgba(255,255,255,.15);
+box-shadow:0 0 35px rgba(255,255,255,.18);
 
 }
 
 
-/* ==========================================
-FLOATING HEARTS
-========================================== */
+/* =========================================
+HEARTS
+========================================= */
 
 #hearts{
 
@@ -414,19 +285,15 @@ pointer-events:none;
 
 overflow:hidden;
 
-z-index:999;
-
 }
 
 .heart{
 
 position:absolute;
 
-bottom:-50px;
+bottom:-40px;
 
 animation:floatHeart linear forwards;
-
-opacity:.9;
 
 }
 
@@ -436,7 +303,7 @@ opacity:.9;
 
 transform:
 translateY(0)
-scale(.6);
+scale(.7);
 
 opacity:1;
 
@@ -455,88 +322,15 @@ opacity:0;
 }
 
 
-/* ==========================================
-LOADING
-========================================== */
-
-#loadingScreen{
-
-position:fixed;
-
-inset:0;
-
-background:#0f172a;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-flex-direction:column;
-
-gap:20px;
-
-z-index:9999;
-
-}
-
-.loader{
-
-width:60px;
-
-height:60px;
-
-border-radius:50%;
-
-border:6px solid rgba(255,255,255,.15);
-
-border-top:6px solid #ff4d88;
-
-animation:spin 1s linear infinite;
-
-}
-
-@keyframes spin{
-
-100%{
-
-transform:rotate(360deg);
-
-}
-
-}
-
-
-/* ==========================================
+/* =========================================
 MOBILE
-========================================== */
+========================================= */
 
 @media(max-width:480px){
 
-#puzzle{
-
-width:95vw;
-
-height:95vw;
-
-}
-
-#finalPhoto{
-
-width:180px;
-
-}
-
-button{
-
-width:100%;
-
-}
-
 h1{
 
-font-size:28px;
+font-size:30px;
 
 }
 
@@ -552,4 +346,16 @@ font-size:16px;
 
 }
 
-   }
+button{
+
+width:100%;
+
+}
+
+#photo{
+
+width:85vw;
+
+}
+
+}
