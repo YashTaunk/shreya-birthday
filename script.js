@@ -31,48 +31,6 @@ I love you endlessly.`,
         }
     };
 
-   /* ----------------------------------------
-   SOUND EFFECTS (No MP3 Required)
----------------------------------------- */
-
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-function playTone(freq, duration = 80, type = "sine", volume = 0.08) {
-
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
-    osc.type = type;
-    osc.frequency.value = freq;
-
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    gain.gain.value = volume;
-
-    osc.start();
-
-    gain.gain.exponentialRampToValueAtTime(
-        0.0001,
-        audioCtx.currentTime + duration / 1000
-    );
-
-    osc.stop(audioCtx.currentTime + duration / 1000);
-
-}
-
-function celebrateSound(){
-
-    playTone(520,120);
-
-    setTimeout(()=>playTone(660,120),120);
-
-    setTimeout(()=>playTone(880,150),240);
-
-    setTimeout(()=>playTone(1100,220),420);
-
-}
-
     /* ----------------------------------------
        State Management
        ---------------------------------------- */
@@ -258,7 +216,6 @@ function celebrateSound(){
     }
 
     function handlePieceClick(piece) {
-       
         if (state.isPuzzleSolved) return;
 
         const gridPosition = parseInt(piece.dataset.gridPosition);
@@ -269,7 +226,6 @@ function celebrateSound(){
         }
 
         if (state.selectedPiece === null) {
-           playTone(550,45,"triangle",0.05);
             // Select first piece
             state.selectedPiece = gridPosition;
             piece.classList.add('selected');
@@ -325,7 +281,6 @@ function celebrateSound(){
                 puzzleSolved();
             }
         }, 300);
-         playTone(380,70,"square",0.05);
     }
 
     function checkPieceCorrectness(piece, gridPos) {
@@ -336,11 +291,6 @@ function celebrateSound(){
         if (isCorrect && !wasCorrect) {
             state.correctPositions[gridPos] = true;
             state.solvedCount++;
-           playTone(760,120,"sine",0.08);
-
-if(navigator.vibrate){
-    navigator.vibrate(15);
-}
             piece.classList.add('locked', 'just-correct');
             setTimeout(() => piece.classList.remove('just-correct'), 500);
             updateProgress();
@@ -399,11 +349,6 @@ function puzzleSolved() {
     try{
 
         launchConfetti();
-       celebrateSound();
-
-if(navigator.vibrate){
-    navigator.vibrate([80,40,80]);
-}
 
     }catch(e){
 
@@ -559,11 +504,6 @@ function typeText(element,text,callback){
     function setupEventListeners() {
         // Start button
         elements.startBtn.addEventListener('click', () => {
-           playTone(450,80);
-
-if(audioCtx.state==="suspended"){
-    audioCtx.resume();
-}
             transitionToScreen('puzzle');
             setTimeout(initializePuzzle, 500);
         });
