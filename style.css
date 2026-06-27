@@ -180,7 +180,7 @@ html, body {
    Welcome Screen
    ============================================ */
 .welcome-card h1 {
-    font-size: 1.8rem;
+    font-size: clamp(1.45rem, 5vw, 1.8rem);
     font-weight: 700;
     margin-bottom: 25px;
     background: linear-gradient(135deg, var(--pink-light), var(--pink-dark));
