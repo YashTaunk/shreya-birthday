@@ -12,7 +12,7 @@
     const CONFIG = {
         GRID_SIZE: 6,
         TOTAL_PIECES: 36,
-        TYPEWRITER_SPEED: 50,
+        TYPEWRITER_SPEED: 35,
         ENCOURAGEMENT_MESSAGES: {
             10: '❤️ You\'re doing great!',
             20: '✨ Halfway there!',
@@ -49,6 +49,46 @@ I love you endlessly.`,
        DOM Elements Cache
        ---------------------------------------- */
     const elements = {};
+
+   let bgMusic = null;
+
+function playBackgroundMusic(){
+
+    if(!bgMusic){
+
+        bgMusic=document.getElementById("bgMusic");
+
+    }
+
+    if(!bgMusic) return;
+
+    bgMusic.volume=0.35;
+
+    bgMusic.play().catch(()=>{});
+
+}
+
+function fadeMusic(){
+
+    if(!bgMusic) return;
+
+    const fade=setInterval(()=>{
+
+        if(bgMusic.volume>0.02){
+
+            bgMusic.volume-=0.02;
+
+        }else{
+
+            clearInterval(fade);
+
+            bgMusic.pause();
+
+        }
+
+    },100);
+
+}
 
     function cacheElements() {
         elements.welcomeScreen = document.getElementById('welcome-screen');
@@ -132,7 +172,7 @@ I love you endlessly.`,
         }
 
         // Continuously create hearts
-        setInterval(createFloatingHeart, 2000);
+        setInterval(createFloatingHeart, 1500);
     }
 
     /* ----------------------------------------
@@ -199,6 +239,12 @@ I love you endlessly.`,
             });
 
             elements.puzzleGrid.appendChild(piece);
+
+           setTimeout(()=>{
+
+    piece.classList.add("reveal");
+
+},gridPosition*25);
         });
     }
 
@@ -350,17 +396,19 @@ function puzzleSolved() {
 
         launchConfetti();
 
+       animatePuzzleComplete();
+
     }catch(e){
 
         console.log(e);
 
     }
 
-    for(let i=0;i<25;i++){
+    for(let i=0;i<40;i++){
 
-        setTimeout(createFloatingHeart,i*120);
+    setTimeout(createFloatingHeart,i*70);
 
-    }
+}
 
     setTimeout(()=>{
 
@@ -379,13 +427,13 @@ function puzzleSolved() {
     function animatePuzzleComplete() {
         const grid = elements.puzzleGrid;
         grid.style.transition = 'transform 0.8s ease, filter 0.8s ease, box-shadow 0.8s ease';
-        grid.style.transform = 'scale(1.02)';
+        grid.style.transform = 'scale(1.08)';
         grid.style.filter = 'brightness(1.1)';
         grid.style.boxShadow = '0 0 50px rgba(255, 105, 180, 0.6)';
 
         setTimeout(() => {
             grid.style.transform = 'scale(1)';
-        }, 800);
+        }, 400);
     }
 
     function launchConfetti() {
@@ -401,7 +449,7 @@ function puzzleSolved() {
         function fire(particleRatio, opts) {
             confetti({
                 ...defaults,
-                particleCount: Math.floor(200 * particleRatio),
+                particleCount: Math.floor(320 * particleRatio),
                 origin: { y: 0.6 },
                 ...opts
             });
@@ -473,6 +521,7 @@ function typeText(element,text,callback){
        Video Screen
        ---------------------------------------- */
     function showVideoScreen() {
+       fadeMusic();
         transitionToScreen('video');
 
         setTimeout(() => {
@@ -503,10 +552,19 @@ function typeText(element,text,callback){
        ---------------------------------------- */
     function setupEventListeners() {
         // Start button
-        elements.startBtn.addEventListener('click', () => {
-            transitionToScreen('puzzle');
-            setTimeout(initializePuzzle, 500);
-        });
+        elements.startBtn.addEventListener('click',()=>{
+
+    playBackgroundMusic();
+
+    transitionToScreen("puzzle");
+
+    setTimeout(()=>{
+
+        initializePuzzle();
+
+    },500);
+
+});
 
         // Video button
         elements.videoBtn.addEventListener('click', showVideoScreen);
